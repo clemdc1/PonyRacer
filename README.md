@@ -25,3 +25,7 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## The project
+
+This application was developed as part of an Angular training conducted with Ninja Squad. It is a website that allows betting on pony races. The co-author of this application is JB Nizet.
