@@ -26,18 +26,12 @@
             "outputPath": "dist/ponyracer",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": []
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
+            "scripts": [],
+            "allowedCommonJsDependencies": ["chart.js", "webstomp-client"]
           },
           "configurations": {
             "production": {
@@ -61,7 +55,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -74,6 +74,11 @@
             },
             "development": {
               "browserTarget": "ponyracer:build:development"
+            },
+            "e2e": {
+              "browserTarget": "ponyracer:build:development",
+              "port": 4201,
+              "liveReload": false
             }
           },
           "defaultConfiguration": "development"
@@ -87,19 +92,54 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "karmaConfig": "karma.conf.js",
+            "codeCoverageExclude": ["**/models/*.ts", "**/app.module.ts", "**/app.routes.ts"],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", "cypress/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "ponyracer:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ponyracer:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "ponyracer:serve:e2e",
+            "browser": "chrome",
+            "baseUrl": "http://localhost:4201",
+            "watch": true,
+            "headless": false,
+            "e2e": true
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ponyracer:serve:production"
+            }
           }
         }
       }

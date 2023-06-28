@@ -1,27 +1,32 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { By } from '@angular/platform-browser';
+
 import { AppComponent } from './app.component';
+import { MenuComponent } from './menu/menu.component';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [AppComponent]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
+    })
+  );
 
-  it('should create the app', () => {
+  it('should have a router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    const element = fixture.nativeElement;
+    const routerOutlet = element.querySelector('router-outlet');
+    expect(routerOutlet).withContext('You need a RouterOutlet component in your root component').not.toBeNull();
   });
 
-  it(`should have the 'ponyracer' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ponyracer');
-  });
-
-  it('should render title', () => {
+  it('should use the menu component', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ponyracer app is running!');
+    const element = fixture.debugElement;
+    expect(element.query(By.directive(MenuComponent)))
+      .withContext('You probably forgot to add MenuComponent to the AppComponent template')
+      .not.toBeNull();
   });
 });
